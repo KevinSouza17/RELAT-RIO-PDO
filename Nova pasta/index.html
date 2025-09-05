@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Técnico: PDO no PHP</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            font-size: 12pt;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 18pt;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 14pt;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        
+        .header-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .header-info p {
+            margin-bottom: 5px;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        code {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 2px 4px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        ol, ul {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 10pt;
+            text-align: center;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-info">
+        <h1>Relatório Técnico: PHP Data Objects (PDO)</h1>
+        <p><strong>Data:</strong> 05/09/2025</p>
+        <p><strong>Autor:</strong> Kevin Gabriel de Souza</p>
+        <p><strong>Disciplina:</strong> Desenvolvimento Web com PHP</p>
+    </div>
+
+    <h2>1. Introdução</h2>
+    <p>O PHP Data Objects (PDO) é uma camada de abstração para acesso a bancos de dados em PHP, fornecendo uma interface consistente para trabalhar com diversos sistemas de gerenciamento de banco de dados. Este relatório tem como objetivo apresentar os conceitos fundamentais do PDO, suas vantagens e como utilizá-lo efetivamente em projetos PHP.</p>
+
+    <h2>2. O que é o PDO e sua função no PHP</h2>
+    <p>O PDO (PHP Data Objects) é uma extensão do PHP que fornece uma interface leve e consistente para acessar bancos de dados. Sua principal função é servir como uma camada de abstração entre o código PHP e o banco de dados, permitindo que os desenvolvedores escrevam código independente do banco de dados específico que está sendo utilizado.</p>
+    
+    <pre>&lt;?php
+// Exemplo básico de uso do PDO
+try {
+    $pdo = new PDO('mysql:host=localhost;dbname=meu_banco', 'usuario', 'senha');
+    echo "Conexão estabelecida com sucesso!";
+} catch (PDOException $e) {
+    echo "Erro na conexão: " . $e->getMessage();
+}
+?&gt;</pre>
+
+    <h2>3. Diferenças entre mysqli e PDO</h2>
+    <table>
+        <tr>
+            <th>Característica</th>
+            <th>MySQLi</th>
+            <th>PDO</th>
+        </tr>
+        <tr>
+            <td>Abstração de banco</td>
+            <td>Suporta apenas MySQL</td>
+            <td>Suporta múltiplos bancos</td>
+        </tr>
+        <tr>
+            <td>API</td>
+            <td>Procedural e OO</td>
+            <td>Apenas Orientada a Objetos</td>
+        </tr>
+        <tr>
+            <td>Prepared Statements</td>
+            <td>Suporta</td>
+            <td>Suporta (mais flexível)</td>
+        </tr>
+        <tr>
+            <td>Nome de parâmetros</td>
+            <td>Apenas posicionais (?)</td>
+            <td>Posicionais e nomeados</td>
+        </tr>
+    </table>
+
+    <h2>4. Processo de conexão com MySQL utilizando PDO</h2>
+    <p>O processo de conexão com um banco de dados MySQL usando PDO envolve a criação de uma instância da classe PDO, passando o DSN (Data Source Name), usuário e senha.</p>
+    
+    <pre>&lt;?php
+// Conexão básica com MySQL
+$host = 'localhost';
+$dbname = 'meu_banco';
+$user = 'usuario';
+$pass = 'senha';
+
+try {
+    // Criando a conexão PDO
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+    
+    // Configurando atributos do PDO
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    
+    echo "Conexão bem-sucedida!";
+} catch (PDOException $e) {
+    die("Erro na conexão: " . $e->getMessage());
+}
+?&gt;</pre>
+
+    <h2>5. Data Source Name (DSN), usuário e senha</h2>
+    <p><strong>DSN (Data Source Name)</strong>: String que especifica o driver do banco de dados e os parâmetros de conexão. Segue o formato: <code>driver:parametro=valor;parametro=valor</code></p>
+    
+    <p>Exemplos de DSN:</p>
+    <ul>
+        <li>MySQL: <code>mysql:host=localhost;dbname=test;charset=utf8</code></li>
+        <li>PostgreSQL: <code>pgsql:host=localhost;port=5432;dbname=test</code></li>
+        <li>SQLite: <code>sqlite:/caminho/para/banco.sqlite</code></li>
+    </ul>
+    
+    <p><strong>Usuário</strong>: Nome de usuário para autenticação no banco de dados</p>
+    <p><strong>Senha</strong>: Senha do usuário para autenticação no banco de dados</p>
+
+    <h2>6. Tratamento de erros com try/catch e PDOException</h2>
+    <p>O PDO utiliza exceções para tratamento de erros, o que permite um controle mais refinado sobre falhas na conexão ou execução de queries.</p>
+    
+    <pre>&lt;?php
+try {
+    // Tentativa de conexão
+    $pdo = new PDO('mysql:host=localhost;dbname=banco_inexistente', 'user', 'pass');
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    // Tentativa de consulta
+    $stmt = $pdo->prepare("SELECT * FROM tabela_inexistente");
+    $stmt->execute();
+    $resultados = $stmt->fetchAll();
+    
+} catch (PDOException $e) {
+    // Capturando e tratando a exceção
+    echo "Erro do PDO: " . $e->getMessage();
+    echo "Código do erro: " . $e->getCode();
+    
+    // Registrando o erro em um log
+    error_log("Erro de BD: " . $e->getMessage(), 3, "erros.log");
+    
+    // Retornando uma mensagem amigável para o usuário
+    die("Desculpe, ocorreu um erro em nosso sistema. Tente novamente mais tarde.");
+}
+?&gt;</pre>
+
+    <h2>7. Principais vantagens de utilizar PDO</h2>
+    <ol>
+        <li><strong>Abstração de banco de dados</strong>: Escreva código uma vez e use com múltiplos bancos de dados</li>
+        <li><strong>Prepared statements</strong>: Proteção contra injeção de SQL de forma nativa</li>
+        <li><strong>Tratamento consistente de erros</strong>: Uso de exceções para tratamento uniforme de erros</li>
+        <li><strong>Flexibilidade na recuperação de dados</strong>: Múltiplos modos de fetch</li>
+        <li><strong>Transações</strong>: Suporte a transações com métodos simples</li>
+        <li><strong>Performance</strong>: Menos overhead comparado a outras camadas de abstração</li>
+    </ol>
+
+    <h2>8. Conclusão</h2>
+    <p>O PDO representa uma evolução significativa no acesso a bancos de dados em PHP, oferecendo uma interface consistente, segura e eficiente para trabalhar com diversos sistemas de gerenciamento de banco de dados. Sua adoção é recomendada para novos projetos, uma vez que proporciona maior segurança contra injeção de SQL através de prepared statements, abstração de banco de dados e um modelo de tratamento de erros robusto através de exceções.</p>
+    
+    <p>A migração de extensões mais antigas como mysql_* ou mesmo mysqli para PDO é vantajosa, considerando os benefícios em termos de segurança, portabilidade e manutenibilidade do código.</p>
+
+    <h2>Referências</h2>
+    <ul>
+        <li>Documentação oficial do PHP: PHP Data Objects (PDO)</li>
+        <li>PHP: The Right Way - Data Handling</li>
+        <li>OWASP: SQL Injection Prevention Cheat Sheet</li>
+    </ul>
+
+    <div class="footer">
+        <p>Relatório técnico sobre PDO no PHP - Página 1</p>
+    </div>
+</body>
+</html>
